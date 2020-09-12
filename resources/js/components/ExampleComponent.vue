@@ -1,30 +1,27 @@
 <template>
   <v-app>
-    <v-card class="ma-auto" max-width="400">
-      <v-img
-        class="white--text align-end"
-        height="200px"
-        src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
-      >
-        <v-card-title>Math Me Up!</v-card-title>
-      </v-img>
-
-      <v-card-text class="text--primary">
-        <div>Number on game!</div>
-      </v-card-text>
-
-      <v-card-actions>
-        <v-btn color="orange" text>Share</v-btn>
-        <v-btn color="orange" text>Explore</v-btn>
-      </v-card-actions>
-    </v-card>
+      <div class="d-flex">
+          <p>{{ question }}</p>
+      </div>
+      <v-btn v-for="(option, i) in answerOptions" :key="i" class="ma-2" tile color="indigo" dark>{{ option.number }}, {{ option.isCorrect }}</v-btn>
   </v-app>
 </template>
 
 <script>
 export default {
-  mounted() {
-    console.log("Component mounted.");
-  },
+    data () {
+        return {
+            question: null,
+            answerOptions: []
+        }
+    },
+    mounted () {
+        axios
+            .post('/getQuestion')
+            .then(response => {
+                this.question = response.data.question;
+                this.answerOptions= response.data.answerOptions;
+            })
+    }
 };
 </script>
