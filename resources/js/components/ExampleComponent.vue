@@ -18,12 +18,12 @@
               <v-btn
                   v-for="(option, i) in answerOptions"
                   :key="i"
-                  class="ma-2 text-h5 font-weight-bold"
+                  class="ma-2 text-h4 font-weight-bold"
                   :color="color"
                   dark
                   large
                   @click="showAnswer($event, option.isCorrect)"
-              >{{ option.number }}, {{ option.isCorrect }}</v-btn>
+              >{{ option.number }}</v-btn>
           </v-row>
       </v-card>
   </v-app>
@@ -51,11 +51,13 @@ export default {
     },
     mounted () {
         axios
-            .post('/getQuestion')
+            .post('/getQuestion', {
+                level: this.level
+            })
             .then(response => {
                 this.question = response.data.question;
                 this.answerOptions= response.data.answerOptions;
-                console.log(response.data)
+
             })
         this.interval = setInterval(() => {
             if (this.value === 0) {
@@ -67,7 +69,7 @@ export default {
     methods: {
         showAnswer(event, isAnswerCorrect) {
             if(isAnswerCorrect) {
-                this.color   = "blue";
+                this.color   = "green";
                 /*console.log(event.target);*/
             } else {
                 this.color = "red";
@@ -75,11 +77,14 @@ export default {
             }
             axios
                 .post('/getQuestion', {
-                    level: this.level
+                    level: this.level += 1
                 })
                 .then(response => {
                     this.question = response.data.question;
-                    this.answerOptions= response.data.answerOptions;
+                    this.answerOptions = response.data.answerOptions;
+                    this.level = response.data.level;
+                    this.color = '#385F73';
+                    console.log(response.data)
                 })
         }
     }
