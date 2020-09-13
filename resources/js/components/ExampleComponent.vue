@@ -1,30 +1,43 @@
 <template>
   <v-app dark>
-      <v-card elevation="16" class="mt-16 mx-4 pa-8" dark>
-          <v-row class="mb-4 justify-end">
-              <v-progress-circular
-                  rotate="-90"
-                  size="40"
-                  width="10"
-                  :value="value"
-                  color="red"
-              ></v-progress-circular>
-          </v-row>
-          <v-row class="px-4" align="center">
-              <div class="text-h2">{{ question }} = ?</div>
-          </v-row>
-          <v-row class="d-flex flex-column pt-5">
-              <!--<AnswerButton color="green" number=7 isCorrect="true" @click="showAnswer($event, true)"></AnswerButton>-->
-              <v-btn
-                  v-for="(option, i) in answerOptions"
-                  :key="i"
-                  class="ma-2 text-h4 font-weight-bold"
-                  :color="color"
-                  dark
-                  large
-                  @click="showAnswer($event, option.isCorrect)"
-              >{{ option.number }}</v-btn>
-          </v-row>
+      <v-card class="mt-16 mx-4 pa-8" dark elevation="16">
+          <div v-if="gameOver">
+              <div class="text-h2">Game Over!</div>
+          </div>
+          <div v-if="!gameRunning">
+            <v-btn @click="startNewGame()">Start new game</v-btn>
+          </div>
+          <div v-else>
+              <v-row align="center" class="px-4">
+                  <div class="text-h2">{{ question }} = ?</div>
+              </v-row>
+              <v-row class="d-flex flex-column pt-5">
+                  <!--<AnswerButton color="green" number=7 isCorrect="true" @click="showAnswer($event, true)"></AnswerButton>-->
+                  <v-btn
+                      v-for="(option, i) in answerOptions"
+                      :key="i"
+                      :color="color"
+                      class="ma-2 text-h4 font-weight-bold"
+                      dark
+                      large
+                      @click="selectAnswer($event, option.isCorrect)"
+                  >{{ option.number }}</v-btn>
+              </v-row>
+              <v-row class="mb-3 mt-10 justify-center">
+                  <v-progress-circular
+                      :value="gameTime"
+                      color="red"
+                      rotate="-90"
+                      size="40"
+                      width="10"
+                  ></v-progress-circular>
+              </v-row>
+              <v-row class="mb-3 mt-10 justify-center">
+                  <p>
+                      {{ gameTime }}
+                  </p>
+              </v-row>
+          </div>
       </v-card>
   </v-app>
 </template>
@@ -41,53 +54,58 @@ export default {
             question: null,
             answerOptions: [],
             interval: {},
-            value: 100,
+            gameTime: 30,
             color: '#385F73',
-            level: 1
+            level: 1,
+            gameRunning: false,
+            gameOver: false
         }
     },
     beforeDestroy () {
         clearInterval(this.interval)
     },
-    mounted () {
-        axios
-            .post('/getQuestion', {
-                level: this.level
-            })
-            .then(response => {
-                this.question = response.data.question;
-                this.answerOptions= response.data.answerOptions;
-
-            })
-        this.interval = setInterval(() => {
-            if (this.value === 0) {
-                return (this.value = 100)
-            }
-            this.value -= 2
-        }, 1000)
-    },
     methods: {
-        showAnswer(event, isAnswerCorrect) {
+        startNewGame() {
+            this.gameOver = false;
+            this.getQuestion();
+            this.setGameTime();
+            this.gameRunning = true;
+        },
+        endGame() {
+            this.gameOver = true;
+            this.gameRunning = false;
+            clearInterval(this.interval)
+        },
+        setGameTime() {
+            this.gameTime = 30;
+            this.interval = setInterval(() => {
+                if (this.gameTime < 0) {
+                    return this.endGame();
+                }
+                this.gameTime -= 1
+            }, 1000)
+        },
+        selectAnswer(event, isAnswerCorrect) {
             if(isAnswerCorrect) {
-                this.color   = "green";
-                /*console.log(event.target);*/
+                this.color = "green";
+                this.getQuestion();
             } else {
                 this.color = "red";
-                /*console.log(event);*/
+                this.gameTime -= 3;
             }
+        },
+        getQuestion() {
             axios
                 .post('/getQuestion', {
-                    level: this.level += 1
+                    level: this.level
                 })
                 .then(response => {
                     this.question = response.data.question;
                     this.answerOptions = response.data.answerOptions;
-                    this.level = response.data.level;
                     this.color = '#385F73';
-                    console.log(response.data)
+                    this.level += 1;
                 })
-        }
-    }
-
+        },
+    },
 };
 </script>
