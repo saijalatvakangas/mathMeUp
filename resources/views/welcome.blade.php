@@ -6,13 +6,10 @@
 
         <title>Math Me Up</title>
 
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
-
     </head>
     <body>
-        <div id="app" class="flex-center position-ref full-height">
-            <example-component></example-component>
+        <div id="app">
+            <game-component></game-component>
         </div>
         <script src="{{ asset('js/app.js')  }}"></script>
     </body>
