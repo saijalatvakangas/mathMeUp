@@ -11,12 +11,20 @@ class Question
      */
     private array $answerOptions;
 
+    /**
+     * Question constructor.
+     * @param string $question
+     * @param array $answerOptions
+     */
     public function __construct(string $question, array $answerOptions)
     {
         $this->question = $question;
         $this->answerOptions = $answerOptions;
     }
 
+    /**
+     * @return string
+     */
     public function getQuestion(): string
     {
         return $this->question;
