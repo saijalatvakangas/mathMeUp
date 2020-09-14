@@ -16,7 +16,7 @@
                                 <v-btn class="my-10 red--text" @click="startNewGame()">Start new game</v-btn>
                             </div>
                             <div v-else>
-                                <div class="mb-4 text-h3">Lives:
+                                <div class="mb-4 text-h5">Lives:
                                     {{lives}}
                                 </div>
                                 <div class="text-h2">{{ question }} = ?</div>
