@@ -1,11 +1,55 @@
-<p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
+# Math Me Up
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+Math Me Up is a mathematical game where the player chooses the correct answers to the calculations. The goal is to reach the highest level possible in a limited time.
+
+## How to run the application
+
+### Prerequisites
+
+Clone project to your working directory:
+
+```
+$ git clone git@github.com:saijalatvakangas/mathMeUp.git
+```
+
+Move under the project folder
+
+```
+$ cd mathmeup
+```
+
+Create ``.env``.env file from ``.env.example``
+
+```
+$ cp .env.example .env
+```
+
+### Installation
+
+Install dependencies
+
+```
+$ composer install
+$ npm install
+```
+
+Generate APP key to .env file
+
+```
+$ php artisan key:generate
+```
+
+### Start the application
+
+Start the application
+
+```
+$ npm run dev
+$ php artisan serve
+```
+
+Application should run on your local host (http://127.0.0.1:8000).
+
 
 ## About Laravel
 
